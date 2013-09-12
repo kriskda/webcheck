@@ -7,7 +7,7 @@ h1 {
 	margin: 0; 	
 }
 
-#header, .details {
+#header, #content, #sidebar, #sitelist, #footer, .site, .details {
 	overflow: hidden;
 }
 
@@ -16,7 +16,7 @@ h1 {
 }
 
 #content, #sidebar, #sitelist, #footer, .site {
-	padding: 0.7em;
+	padding: 5px;
 }
 
 #sidebar, #sitelist {
@@ -45,7 +45,7 @@ h1 {
 }
 
 .footertext {
-	color: #eee;
+	color: #666;
 }
 
 .logout {

@@ -23,14 +23,15 @@
 			<ul class=entries>
 			{% for site in sites %}
 			<div class="site">
-				<a href="{{ site.url }}" target="_blank">{{ site.url }}</a><br />
+				<b><a href="{{ site.url }}" target="_blank">{{ site.url }}</a></b>
+				<br />
 				<div class="details">
 				<div class="left"><b>Last check:</b> {{ site.last_check }}</div>
 				<div class="right"><a href="#">Edit</a> <a href="#">Delete</a> {{ site.status_code }}</div>				
 				</div>
 			</div>
 			{% else %}
-			<li><em>No sites so far...</em>
+			<em>No sites so far...</em>
 			{% endfor %}
 			</ul>	
 		</div>
