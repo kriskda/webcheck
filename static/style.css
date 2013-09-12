@@ -1,14 +1,21 @@
-h1 { 
+h1, a {
 	color: #377ba8;
+}
+
+h1 { 
 	font-family: 'Georgia', serif; 
 	margin: 0; 	
 }
 
-h1, #content {
+#header, .details {
+	overflow: hidden;
+}
+
+#header, #content, .site {
 	border-bottom: 2px solid #eee; 
 }
 
-#content, #sidebar, #sitelist {
+#content, #sidebar, #sitelist, #footer, .site {
 	padding: 0.7em;
 }
 
@@ -17,11 +24,34 @@ h1, #content {
 }
 
 #sidebar {
-  width: 250px;
-  float: left;
+	width: 250px;
+	float: left;
 }
 
 #sitelist {
-  margin-left: 290px;
+	margin-left: 290px;
 }
 
+.details {
+	padding-top: 5px;
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+.footertext {
+	color: #eee;
+}
+
+.logout {
+	text-align:right
+}
+
+a {
+	text-decoration:none;
+}
