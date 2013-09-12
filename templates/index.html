@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html>
+	<head>	
+		<title>webcheck</title>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">		
+	</head>
+	
+	<body>	
+	
+	<div id="header">
+		<h1>webcheck</h1>
+	</div>
+	
+	<div id="content">
+		<div id="sidebar">
+			<b>Add website</b>
+			<form name="addsite" method="POST">
+				Url: <input type="text" name="url"><input type="submit" value="Add">
+			</form>
+		</div>
+		
+		<div id="sitelist">
+			<ul class=entries>
+			{% for site in sites %}
+			<li>
+				<a href="{{ site.url }}" target="_blank">{{ site.url }}</a><br />
+				{{ site.last_check }} {{ site.status_code }}				
+			</li>
+			{% else %}
+			<li><em>No sites so far...</em>
+			{% endfor %}
+			</ul>	
+		</div>
+	</div>
+	
+	<div id="footer">2013</div>
+	
+	</body>
+	
+</html>
