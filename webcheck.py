@@ -1,31 +1,44 @@
-from flask import Flask, render_template, jsonify
+import sqlite3
+from flask import Flask, render_template, jsonify, g, request
+#from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
+from contextlib import closing
 
 app = Flask(__name__)
 
-sites = [
-	{
-		'id': 1,
-		'url': 'http://icse.us.edu.pl',
-		'last_check': '07.09.2013 @ 13:21',
-		'status_code': 200
-	},
-	{
-		'id': 2,
-		'url': 'http://forszt.us.edu.pl',
-		'last_check': '07.09.2013 @ 13:22',
-		'status_code': 200
-	},
-	{
-		'id': 3,
-		'url': 'http://manager.us.edu.pl',
-		'last_check': '07.09.2013 @ 13:23',
-		'status_code': 404
-	}	
-]
+app.config.update(dict(
+	DATABASE='webcheck.db',
+	DEBUG=True,
+	SECRET_KEY='development key',
+	USERNAME='admin',
+	PASSWORD='default'
+))
+
+sites = []
+
+def connect_db():
+    return sqlite3.connect(app.config['DATABASE'])
+
+def init_db():
+    with closing(connect_db()) as db:
+        with app.open_resource('schema.sql', mode='r') as f:
+            db.cursor().executescript(f.read())
+        db.commit()
 
 @app.route('/sites', methods = ['GET'])
 def get_tasks():
     return jsonify( { 'sites': sites } )
+
+@app.route('/add', methods = ['POST'])
+def add_site():
+    site = {
+        'id': len(sites) +1,
+        'url': request.json['url'],
+        'last_check': u'Not check yet',
+        'status_code': u'Unknown'
+    }
+    
+    sites.append(site)
+    return jsonify( { 'sites': site } ), 201
 
 @app.route('/')
 def index():
