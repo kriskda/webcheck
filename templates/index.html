@@ -28,7 +28,7 @@
 			<div class="span8 offset">
 					<ul class=entries>
 					{% for site in sites %}
-					<div class="site-entry">
+					<div id="site-entry{{ site.id }}" class="site-entry">
 						<b><a href="{{ site.url }}" target="_blank">{{ site.url }}</a></b>
 						<br />
 						<div class="details">
@@ -76,18 +76,22 @@
 					success: function(data) {
 						console.log(data);
 					},
-					dataType: "json"
+					dataType: "json",
 				});
 			});
 			
-			$('.btn-danger').click(function(e) {
+			$('.btn-danger').click(function(e) {				
 				var id = e.target.id.replace("delete-site", "");
-
+				
 				$.ajax({
 					type: "DELETE",
 					url: "/delete/" + id,	
 					success: function()	{
-						console.log("ok");
+						var site_entry_id = "#site-entry" + id;
+	
+						$(site_entry_id).fadeOut(300, function(){ 
+							$(this).remove();
+						});
 					},	
 				});
 			});
