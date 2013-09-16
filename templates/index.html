@@ -38,7 +38,9 @@
 								{{ site.last_check }}
 							</div>						
 							<div class="right">
-								 {{ site.status_code }} <a href="#" class="btn btn-mini btn-warning">Edit</a> <a href="#" class="btn btn-small btn-danger">Delete</a>
+								 {{ site.status_code }} 
+								 <a id="edit-site{{ site.id }}" href="#" class="btn btn-mini btn-warning">Edit</a> 
+								 <a id="delete-site{{ site.id }}" href="#" class="btn btn-small btn-danger">Delete</a>
 							</div>	
 						</div>
 					</div>
@@ -71,12 +73,25 @@
 					contentType: "application/json; charset=utf-8",
 					url: "/add",
 					data: JSON.stringify({ url: url }),
-					success: function (data) {
-						console.log(data.url);
+					success: function(data) {
+						console.log(data);
 					},
 					dataType: "json"
 				});
 			});
+			
+			$('.btn-danger').click(function(e) {
+				var id = e.target.id.replace("delete-site", "");
+
+				$.ajax({
+					type: "DELETE",
+					url: "/delete/" + id,	
+					success: function()	{
+						console.log("ok");
+					},	
+				});
+			});
+			
 		});
 	</script>
 	</body>

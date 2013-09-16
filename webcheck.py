@@ -31,7 +31,7 @@ def get_tasks():
 @app.route('/add', methods = ['POST'])
 def add_site():
     site = {
-        'id': len(sites) +1,
+        'id': len(sites),
         'url': request.json['url'],
         'last_check': u'Not check yet',
         'status_code': u'Unknown'
@@ -39,6 +39,17 @@ def add_site():
     
     sites.append(site)
     return jsonify( { 'sites': site } ), 201
+
+@app.route('/delete/<int:site_id>', methods = ['DELETE'])
+def delete_site(site_id):
+    site = filter(lambda t: t['id'] == site_id, sites)
+    
+    if len(site) == 0:
+        abort(404)
+        
+    sites.remove(site[0])
+    
+    return jsonify( { 'result': True } )
 
 @app.route('/')
 def index():
