@@ -1,0 +1,18 @@
+.site-entry {
+	padding: 10px;
+	border: 1px solid #eee;
+	overflow: hidden;
+}
+
+.details {
+	padding-top: 5px;
+	overflow: hidden;
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}

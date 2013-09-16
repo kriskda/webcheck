@@ -2,39 +2,54 @@
 <html>
 	<head>	
 		<title>webcheck</title>
-		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">		
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">	
+		
+		<link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.css') }}">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/flat-ui.css') }}">	
 	</head>
 	
 	<body>		
-	<div id="header">
-		<div class="left"><h1>webcheck</h1></div>
-		<div class="right"><a href="#" />logout</a></div>
-	</div>
+	
+	<div class="container">
+		
+		<div class="demo-headline">
+			<h1>webcheck</h1>
+			<a href="#" />logout</a>
+		</div>
 
-	<div id="content">
-		<div id="sidebar">
-			<b>Add website</b>
-			<form name="addsite" method="POST">
-				Url: <input type="text" name="url"><input type="submit" value="Add">
-			</form>
+		<div class="row">
+			<div class="span3">
+				<b>Add website</b>
+				<form name="addsite" method="POST">
+					<input type="text" name="url" placeholder="url"><a href="#fakelink" class="btn btn-large btn-primary">Add</a>
+				</form>
+			</div>
+			
+			<div class="span8 offset">
+					<ul class=entries>
+					{% for site in sites %}
+					<div class="site-entry">
+						<b><a href="{{ site.url }}" target="_blank">{{ site.url }}</a></b>
+						<br />
+						<div class="details">
+							<div class="left">
+								<b>Last check:</b> 
+								<br />
+								{{ site.last_check }}
+							</div>						
+							<div class="right">
+								 {{ site.status_code }} <a href="#" class="btn btn-mini btn-warning">Edit</a> <a href="#" class="btn btn-small btn-danger">Delete</a>
+							</div>	
+						</div>
+					</div>
+					<br />
+					{% else %}
+					<em>No sites so far...</em>
+					{% endfor %}
+					</ul>
+			</div>			
 		</div>
 		
-		<div id="sitelist">
-			<ul class=entries>
-			{% for site in sites %}
-			<div class="site">
-				<b><a href="{{ site.url }}" target="_blank">{{ site.url }}</a></b>
-				<br />
-				<div class="details">
-				<div class="left"><b>Last check:</b> {{ site.last_check }}</div>
-				<div class="right"><a href="#">Edit</a> <a href="#">Delete</a> {{ site.status_code }}</div>				
-				</div>
-			</div>
-			{% else %}
-			<em>No sites so far...</em>
-			{% endfor %}
-			</ul>	
-		</div>
 	</div>
 	
 	<div id="footer">
