@@ -1,0 +1,16 @@
+					<div id="site-entry{{ site.id }}" class="site-entry">
+						<b><a href="{{ site.url }}" target="_blank">{{ site.url }}</a></b>
+						<br />
+						<div class="details">
+							<div class="left">
+								<b>Last check:</b> 
+								<br />
+								{{ site.last_check }}
+							</div>						
+							<div class="right">
+								 {{ site.status_code }} 
+								 <a id="edit-site{{ site.id }}" href="#" class="btn btn-mini btn-warning">Edit</a> 
+								 <a id="delete-site{{ site.id }}" href="#" class="btn btn-small btn-danger">Delete</a>
+							</div>	
+						</div>
+					</div>

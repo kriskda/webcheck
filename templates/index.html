@@ -25,31 +25,31 @@
 				</form>
 			</div>
 			
-			<div class="span8 offset">
-					<ul class=entries>
-					{% for site in sites %}
-					<div id="site-entry{{ site.id }}" class="site-entry">
-						<b><a href="{{ site.url }}" target="_blank">{{ site.url }}</a></b>
-						<br />
-						<div class="details">
-							<div class="left">
-								<b>Last check:</b> 
-								<br />
-								{{ site.last_check }}
-							</div>						
-							<div class="right">
-								 {{ site.status_code }} 
-								 <a id="edit-site{{ site.id }}" href="#" class="btn btn-mini btn-warning">Edit</a> 
-								 <a id="delete-site{{ site.id }}" href="#" class="btn btn-small btn-danger">Delete</a>
-							</div>	
-						</div>
-					</div>
+			<div id="sites-list" class="span8 offset">		
+				{% for site in sites %}
+				<div id="site-entry{{ site.id }}" class="site-entry">
+					<b><a href="{{ site.url }}" target="_blank">{{ site.url }}</a></b>
 					<br />
-					{% else %}
+					<div class="details">
+						<div class="left">
+							<b>Last check:</b> 
+							<br />
+							{{ site.last_check }}
+						</div>						
+						<div class="right">
+							 {{ site.status_code }} 
+							 <a id="edit-site{{ site.id }}" href="#" class="btn btn-mini btn-warning">Edit</a> 
+							 <a id="delete-site{{ site.id }}" href="#" class="btn btn-small btn-danger">Delete</a>
+						</div>	
+					</div>
+				</div>					
+				{% else %}
+				<div id="no-site-entry">
 					<em>No sites so far...</em>
-					{% endfor %}
-					</ul>
+				</div>
+				{% endfor %}			
 			</div>			
+			
 		</div>
 		
 	</div>
@@ -65,6 +65,8 @@
 	<script src="{{ url_for('static', filename='js/jquery-1.10.2.min.js') }}"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
+			var FADE_INOUT_TIME = 500;
+
 			$('#addlink').click(function() {
 				var url = document.getElementById('input-url').value;
 
@@ -74,28 +76,40 @@
 					url: "/add",
 					data: JSON.stringify({ url: url }),
 					success: function(data) {
-						console.log(data);
+						var id = data.site.id;
+												
+						if ($("#no-site-entry")){
+							$("#no-site-entry").fadeOut(FADE_INOUT_TIME, function(){ 
+								$(this).remove();
+							});
+						}
+						
+						$.get("site/" + id, function(data) {
+							$("#sites-list").append(data);
+							$("#site-entry" + id).hide().fadeIn(FADE_INOUT_TIME);
+						});	
+						
 					},
 					dataType: "json",
 				});
 			});
-			
-			$('.btn-danger').click(function(e) {				
+
+			$(document).on("click", '.btn-danger', function(e) {				
 				var id = e.target.id.replace("delete-site", "");
-				
+
 				$.ajax({
 					type: "DELETE",
 					url: "/delete/" + id,	
 					success: function()	{
-						var site_entry_id = "#site-entry" + id;
-	
-						$(site_entry_id).fadeOut(300, function(){ 
+
+						$("#site-entry" + id).fadeOut(FADE_INOUT_TIME, function(){ 
 							$(this).remove();
 						});
+						
 					},	
 				});
 			});
-			
+
 		});
 	</script>
 	</body>

@@ -5,6 +5,7 @@ from contextlib import closing
 
 app = Flask(__name__)
 
+# App config
 app.config.update(dict(
 	DATABASE='webcheck.db',
 	DEBUG=True,
@@ -15,6 +16,7 @@ app.config.update(dict(
 
 sites = []
 
+# Database service
 def connect_db():
     return sqlite3.connect(app.config['DATABASE'])
 
@@ -24,10 +26,7 @@ def init_db():
             db.cursor().executescript(f.read())
         db.commit()
 
-@app.route('/sites', methods = ['GET'])
-def get_tasks():
-    return jsonify( { 'sites': sites } )
-
+# Route functions
 @app.route('/add', methods = ['POST'])
 def add_site():
     site = {
@@ -38,7 +37,7 @@ def add_site():
     }
     
     sites.append(site)
-    return jsonify( { 'sites': site } ), 201
+    return jsonify( { 'site': site } ), 201
 
 @app.route('/delete/<int:site_id>', methods = ['DELETE'])
 def delete_site(site_id):
@@ -50,6 +49,10 @@ def delete_site(site_id):
     sites.remove(site[0])
     
     return jsonify( { 'result': True } )
+
+@app.route('/site/<int:site_id>')
+def get_site(site_id):
+    return render_template('site.html', site = sites[site_id])
 
 @app.route('/')
 def index():
