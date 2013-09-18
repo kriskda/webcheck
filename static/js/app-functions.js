@@ -11,16 +11,16 @@ $(document).ready(function(){
 			data: JSON.stringify({ url: url }),
 			success: function(data) {
 				var id = data.site.id;
-												
-				if ($("#no-site-entry")){
-					$("#no-site-entry").fadeOut(FADE_INOUT_TIME, function(){ 
-						$(this).remove();
-					});
-				}
-						
+		
 				$.get("site/" + id, function(data) {
 					$("#sites-list").append(data);
 					$("#site-entry" + id).hide().fadeIn(FADE_INOUT_TIME);
+					
+					if ($("#no-site-entry")){
+						$("#no-site-entry").fadeOut(FADE_INOUT_TIME, function() { 
+							$(this).remove();
+						});
+					}
 				});	
 						
 			},
@@ -34,10 +34,14 @@ $(document).ready(function(){
 		$.ajax({
 			type: "DELETE",
 			url: "/delete/" + id,	
-			success: function()	{
+			success: function(data)	{
 
 				$("#site-entry" + id).fadeOut(FADE_INOUT_TIME, function(){ 
 					$(this).remove();
+					
+					if (data.sites_number == 0) {
+						$("#sites-list").append('<div id="no-site-entry"><em>No sites so far...</em></div>').hide().fadeIn(FADE_INOUT_TIME);
+					}
 				});
 						
 			},	

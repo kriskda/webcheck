@@ -48,7 +48,7 @@ def delete_site(site_id):
         
     sites.remove(site[0])
     
-    return jsonify( { 'result': True } )
+    return jsonify( { 'sites_number': len(sites) } )
 
 @app.route('/site/<int:site_id>')
 def get_site(site_id):
