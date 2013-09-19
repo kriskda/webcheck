@@ -14,8 +14,6 @@ app.config.update(dict(
 	PASSWORD='default'
 ))
 
-sites = []
-
 # Database service
 def connect_db():
     rv = sqlite3.connect(app.config['DATABASE'])
