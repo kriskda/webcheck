@@ -9,8 +9,8 @@ $(document).ready(function(){
 			contentType: "application/json; charset=utf-8",
 			url: "/add",
 			data: JSON.stringify({ url: url }),
-			success: function(data) {
-				var id = data.site.id;
+			success: function(site) {
+				var id = site.id;
 		
 				$.get("site/" + id, function(data) {
 					$("#sites-list").append(data);
