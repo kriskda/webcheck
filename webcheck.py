@@ -1,9 +1,10 @@
 import sqlite3
 from flask import Flask, render_template, jsonify, g, request
-#from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 from contextlib import closing
+from scheduler import WebCheckScheduler
 
 app = Flask(__name__)
+web_check_scheduler = WebCheckScheduler()
 
 # App config
 app.config.update(dict(
@@ -11,7 +12,7 @@ app.config.update(dict(
 	DEBUG=True,
 	SECRET_KEY='development key',
 	USERNAME='admin',
-	PASSWORD='default'
+	PASSWORD='default',
 ))
 
 # Database service
@@ -71,5 +72,8 @@ def index():
     return render_template('index.html', sites = query_db('SELECT * FROM sites'))
 
 if __name__ == '__main__':
-    app.run()
+    web_check_scheduler.start(10)
+    app.run(use_reloader=False)
+
+
 
