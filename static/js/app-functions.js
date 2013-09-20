@@ -3,6 +3,10 @@ $(document).ready(function(){
 
 	$('#addlink').click(function() {
 		var url = document.getElementById('input-url').value;
+		
+		if (url.indexOf('http://') == -1) {
+			url = 'http://' + url;
+		}
 
 		$.ajax({
 			type: "POST",
