@@ -32,7 +32,7 @@ $(document).ready(function(){
 		});
 	});
 
-	$(document).on("click", '.btn-danger', function(e) {				
+	$(document).on("click", '.delete-button', function(e) {				
 		var id = e.target.id.replace("delete-site", "");
 
 		$.ajax({
