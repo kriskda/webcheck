@@ -41,6 +41,6 @@ def index():
 
 if __name__ == '__main__':
     web_check_scheduler.start(60)    
-    app.run(use_reloader=False)
+    app.run(use_reloader=False) # we don't want reloader due to scheduler
 
 

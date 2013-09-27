@@ -1,5 +1,6 @@
 import logging
 logging.basicConfig()
+
 from apscheduler.scheduler import Scheduler
 from model import URLCheck
 from datetime import datetime
