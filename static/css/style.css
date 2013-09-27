@@ -24,13 +24,13 @@ div.status {
 }
  
 div.status-alert {
-	background-color: #c0392b;
+	background-color: #e74c3c;
 }
 
 div.status-normal {
-	background-color: #27ae60;
+	background-color: #2ecc71;
 }
 
 div.status-unknown {
-	background-color: #7f8c8d;
+	background-color: #bdc3c7;
 }
