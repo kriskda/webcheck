@@ -52,5 +52,17 @@ $(document).ready(function(){
 		});
 		
 	});
+	
+	function checkDBForUpdate() {
+		console.log("Check DB for change")
+	}
+	
+	function reloadChanges() {
+		
+	}
+	
+	setInterval(function(){checkDBForUpdate()}, 5000);
+
+
 
 });
