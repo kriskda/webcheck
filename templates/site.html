@@ -8,9 +8,23 @@
 								{{ site.last_check }}
 							</div>						
 							<div class="right">
-								 {{ site.status_code }} 
-								 <a id="edit-site{{ site.id }}" href="#" class="btn btn-mini btn-warning">Edit</a> 
-								 <a id="delete-site{{ site.id }}" href="#" class="btn btn-small btn-danger">Delete</a>
+								<div class="row">
+									{% if site.status_code == "200" %}
+									<div class="span1 status status-normal">
+									{% elif site.status_code == "Unknown" %}
+									<div class="span1 status status-unknown">
+									{% elif site.status_code == "Offline" %}
+									<div class="span1 status status-alert">
+									{% else %}
+									<div class="span1 status status-alert">
+									{% endif %}								
+										{{ site.status_code }}
+									</div>
+									<div class="span2">
+										<a id="edit-site{{ site.id }}" href="#" class="edit-button btn btn-mini btn-primary">Edit</a> 
+										<a id="delete-site{{ site.id }}" href="#" class="delete-button btn btn-mini btn-primary">Delete</a>
+									</div>
+								</div>
 							</div>	
 						</div>
 					</div>

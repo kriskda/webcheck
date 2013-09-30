@@ -17,3 +17,20 @@
 .right {
 	float: right;
 }
+
+div.status {
+	color: white;
+	padding: 12px;
+}
+ 
+div.status-alert {
+	background-color: #e74c3c;
+}
+
+div.status-normal {
+	background-color: #2ecc71;
+}
+
+div.status-unknown {
+	background-color: #bdc3c7;
+}
