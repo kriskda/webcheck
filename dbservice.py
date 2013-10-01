@@ -1,5 +1,6 @@
 import sqlite3
 from flask import g
+from contextlib import closing
 
 class DBService(object):
     app = None

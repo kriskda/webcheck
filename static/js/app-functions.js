@@ -54,11 +54,20 @@ $(document).ready(function(){
 	});
 	
 	function checkDBForUpdate() {
-		console.log("Check DB for change")
+		$.ajax({
+			type: "GET",
+			url: "/check_db_change",	
+			success: function(data)	{
+				console.log(data);				
+				if (data['1'] == '1') {
+					reloadChanges();
+				}							
+			},	
+		});
 	}
 	
 	function reloadChanges() {
-		
+		console.log("Reloading changes");
 	}
 	
 	setInterval(function(){checkDBForUpdate()}, 5000);
