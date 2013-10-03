@@ -53,25 +53,65 @@ $(document).ready(function(){
 		
 	});
 	
-	function checkDBForUpdate() {
+    function setDBState(stateCode) {
+		$.ajax({
+			type: "POST",
+			contentType: "application/json; charset=utf-8",
+			url: "/set_db_state",
+			data: JSON.stringify({ db_code: '0' }),
+			success: function(data) {
+				
+			},
+			dataType: "json",
+		});
+	};
+	
+	function reloadChanges() {
+		console.log("reload");
+		
 		$.ajax({
 			type: "GET",
-			url: "/check_db_change",	
-			success: function(data)	{
-				console.log(data);				
+			url: "/sites",
+			success: function(data) {	
+				var sites = data.result;						
+				var className, statusCode;
+				
+				for (var i = 0 ; i < sites.length ; i++) {
+					statusCode =  sites[i].status_code;
+					
+					if (statusCode == "200") {
+						className = "span1 status status-normal";
+					} else if (statusCode == "Unknown") {
+						className = "span1 status status-unknown";
+					} else if (statusCode == "Offline") {
+						className = "span1 status status-alert";
+					} else {
+						className = "span1 status status-alert";
+					}		
+					
+					$("#last-check" + sites[i].id).text(sites[i].last_check);
+					$("#status-code" + sites[i].id).text(statusCode);
+					$("#status-code" + sites[i].id).attr('class', className);	
+				}		
+				
+				setDBState(0);												
+			},
+		});
+	};
+	
+	function checkDBForUpdate() {
+		console.log("checking");
+		$.ajax({
+			type: "GET",
+			url: "/check_db_state",	
+			success: function(data)	{			
 				if (data['1'] == '1') {
 					reloadChanges();
 				}							
 			},	
 		});
-	}
-	
-	function reloadChanges() {
-		console.log("Reloading changes");
-	}
-	
-	setInterval(function(){checkDBForUpdate()}, 5000);
-
-
+	};
+		
+	setInterval(function() {checkDBForUpdate()}, 5000);
 
 });

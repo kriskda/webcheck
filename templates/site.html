@@ -5,18 +5,18 @@
 							<div class="left">
 								<b>Last check:</b> 
 								<br />
-								{{ site.last_check }}
+								<div id="last-check{{ site.id }}">{{ site.last_check }}</div>
 							</div>						
 							<div class="right">
 								<div class="row">
 									{% if site.status_code == "200" %}
-									<div class="span1 status status-normal">
+									<div id="status-code{{ site.id }}" class="span1 status status-normal">
 									{% elif site.status_code == "Unknown" %}
-									<div class="span1 status status-unknown">
+									<div id="status-code{{ site.id }}" class="span1 status status-unknown">
 									{% elif site.status_code == "Offline" %}
-									<div class="span1 status status-alert">
+									<div id="status-code{{ site.id }}" class="span1 status status-alert">
 									{% else %}
-									<div class="span1 status status-alert">
+									<div id="status-code{{ site.id }}" class="span1 status status-alert">
 									{% endif %}								
 										{{ site.status_code }}
 									</div>
