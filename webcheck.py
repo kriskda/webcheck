@@ -19,6 +19,32 @@ dbservice.app = app
 web_check_scheduler = WebCheckScheduler(dbservice)
 
 # Route functions
+@app.route('/check_db_state', methods = ['GET'])
+def check_db_state():
+    sites_number = len(dbservice.query_db('SELECT * FROM sites'))	
+ 	
+    if sites_number == 0:	
+        dbservice.execute_db('UPDATE dbutil SET db_code=? WHERE id=?', [0, 1])        
+	
+    return jsonify( dbservice.query_db('SELECT * FROM dbutil') )
+
+@app.route('/set_db_state', methods = ['POST'])
+def set_db_state():	
+    dbservice.execute_db('UPDATE dbutil SET db_code=? WHERE id=?', [request.json['db_code'], 1])  	
+    
+    return jsonify( {'status': 'success'} )
+
+@app.route('/sites', methods = ['GET'])
+def get_sites():
+    sites = dbservice.query_db('SELECT * FROM sites')
+    result = []
+    
+    for site in  sites:	
+        data = {'id': site['id'], 'url': site['url'], 'last_check': site['last_check'], 'status_code': site['status_code']}		
+        result.append(data)		
+		
+    return jsonify( result=result )
+
 @app.route('/add', methods = ['POST'])
 def add_site():
     dbservice.execute_db('INSERT INTO sites (url, last_check, status_code) VALUES (?, ?, ?)', [request.json['url'], u'Not checked yet', u'Unknown'])
@@ -37,9 +63,12 @@ def get_site(site_id):
 
 @app.route('/')
 def index():
+    dbservice.execute_db('UPDATE dbutil SET db_code=? WHERE id=?', [0, 1])
+    
     return render_template('index.html', sites = dbservice.query_db('SELECT * FROM sites'))
 
 if __name__ == '__main__':
+    dbservice.init_db()	
     web_check_scheduler.start(60)    
     app.run(use_reloader=False) # we don't want reloader due to scheduler
 

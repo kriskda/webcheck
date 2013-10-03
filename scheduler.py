@@ -16,15 +16,18 @@ class WebCheckScheduler(object):
     def main_job(self):		  
         websites = self.dbservice.query_db('SELECT * FROM sites')
   
-        for	website in websites:	            
-            url = website['url']    
-            webid = website['id']
-            status_code = self.url_check.get_url_status(url)	
-            last_check = datetime.now().strftime('%Y-%m-%d %H:%M:%S')            
-                        
-            self.dbservice.execute_db('UPDATE sites SET last_check=?, status_code=? WHERE id=?', [last_check, status_code, webid])
-
-            print "Will send e-mails...TBD\n"
+        if len(websites) != 0:
+            for	website in websites:	            
+                url = website['url']    
+                webid = website['id']
+                status_code = self.url_check.get_url_status(url)	
+                last_check = datetime.now().strftime('%Y-%m-%d %H:%M:%S')            
+                
+                self.dbservice.execute_db('UPDATE sites SET last_check=?, status_code=? WHERE id=?', [last_check, status_code, webid])
+                            
+                print "Will send e-mails...TBD\n"
+            
+            self.dbservice.execute_db('UPDATE dbutil SET db_code=? WHERE id=?', [1, 1])
                   	
     def change_interval(self, interval_seconds):	
         self.sched.shutdown()
