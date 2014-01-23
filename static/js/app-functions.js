@@ -32,6 +32,54 @@ $(document).ready(function(){
 		});
 	});
 
+	$(document).on("click", '.edit-button', function(e) {
+		var id = this.id.slice(-1);
+		
+		var url_obj = $("#url-link" + id);
+		var url = url_obj.attr("href");
+		
+		var edit_form_code = '<form id="edit-form' + id + '" name="addsite" method="POST">' +
+					         '<input id="edit-input' + id + '" type="text" value="' + url + '"><br />' + 
+					         '<a id="save-button' + id + '" href="#" class="save-button btn btn-small btn-primary">Save</a>' + " " +
+					         '<a id="cancel-button' + id + '" href="#" class="cancel-button btn btn-small btn-primary">Cancel</a>' +
+						     '</form>';
+		
+		url_obj.replaceWith(edit_form_code);
+	});
+
+	$(document).on("click", '.save-button', function(e) {
+		var id = this.id.slice(-1);
+		var url = $("#edit-input" + id).val();
+
+		$.ajax({
+			type: "PUT",
+			contentType: "application/json; charset=utf-8",
+			url: "/edit/" + id,
+			data: JSON.stringify({ url: url }),
+			success: function(data)	{
+				closeEditInput(id, url);
+		
+				$("#last-check" + id).text("Not checked yet");
+				$("#status-code" + id).text("Unknown");
+				$("#status-code" + id).attr('class', "span1 status status-unknown");
+			}
+		});
+
+	});
+
+	$(document).on("click", '.cancel-button', function(e) {
+		var id = this.id.slice(-1);
+		var url = $("#edit-input" + id).attr("value");
+
+		closeEditInput(id, url);
+	});
+
+	function closeEditInput(id, url) {		
+		var url_code = '<a id="url-link' + id + '" href="' + url + '" target="_blank"><b>' + url + '</b></a>';
+		
+		$('#edit-form' + id).replaceWith(url_code);
+	};
+
 	$(document).on("click", '.delete-button', function(e) {				
 		var id = e.target.id.replace("delete-site", "");
 
@@ -67,8 +115,6 @@ $(document).ready(function(){
 	};
 	
 	function reloadChanges() {
-		console.log("reload");
-		
 		$.ajax({
 			type: "GET",
 			url: "/sites",
@@ -100,7 +146,6 @@ $(document).ready(function(){
 	};
 	
 	function checkDBForUpdate() {
-		console.log("checking");
 		$.ajax({
 			type: "GET",
 			url: "/check_db_state",	
