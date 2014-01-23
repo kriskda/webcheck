@@ -57,6 +57,12 @@ def add_site():
 
     return jsonify( dbservice.query_db('SELECT * FROM sites ORDER BY id DESC LIMIT 1')[0] ), 201
 
+@app.route('/edit/<int:site_id>', methods = ['PUT'])
+def edit_site(site_id):
+	dbservice.execute_db('UPDATE sites SET url = ? WHERE id = ?', [request.json['url'], site_id])
+	
+	return jsonify( { 'edit': 'ok' } )
+
 @app.route('/delete/<int:site_id>', methods = ['DELETE'])
 def delete_site(site_id):
     dbservice.execute_db('DELETE FROM sites WHERE id == ?', [site_id])
