@@ -1,3 +1,4 @@
+import socket
 import smtplib
 from email.mime.text import MIMEText
 
@@ -22,8 +23,16 @@ class MailSender:
             server.login(self.username, self.password)
             server.sendmail(self.from_email, to_email, mime_message.as_string())
             server.quit()
+        except socket.gaierror:
+            print "Could not send e-mail. Check server name!"			            
         except smtplib.SMTPAuthenticationError:
-            print "Could not send notification e-mail. Check user name, password and server name!"			
+            server.quit()
+            print "Could not send e-mail. Check user name, password and server name!"		
+        except smtplib.SMTPRecipientsRefused:
+            server.quit()
+            print "Could not send e-mail. Check recipent e-mail adress!"	
+        except smtplib.SMTPServerDisconnected:
+            print "Could not send e-mail, server disconnected!"			            			    
 
     def composeMimeMessage(self, to_email, subject, message):
         mime_message = MIMEText(message, 'plain', 'utf-8')

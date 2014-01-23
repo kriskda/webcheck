@@ -19,6 +19,8 @@ class WebCheckScheduler(object):
         notificator_password = app.config['NOTIFICATOR_PASSWORD']
         notificator_mail_server = app.config['NOTIFICATOR_MAIL_SERVER']
         
+        self.notificator_email_to = app.config['NOTIFICATOR_EMAIL_TO']
+        
         self.mail_sender = MailSender(notificator_email, notificator_user, notificator_password, notificator_mail_server)  
 
     def main_job(self):		  
@@ -38,7 +40,7 @@ class WebCheckScheduler(object):
 					title = "Notification : " + url
 					message = "Web site is offline..."
 
-					self.mail_sender.send_message('vuelo.kda@gmail.com',  title, message)
+					self.mail_sender.send_message(self.notificator_email_to,  title, message)
             
             self.dbservice.execute_db('UPDATE dbutil SET db_code=? WHERE id=?', [1, 1])
                   	

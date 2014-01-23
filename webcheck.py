@@ -17,6 +17,7 @@ app.config.update(dict(
 	NOTIFICATOR_USER = '',
 	NOTIFICATOR_PASSWORD = '',	
 	NOTIFICATOR_MAIL_SERVER = '',
+	NOTIFICATOR_EMAIL_TO = '',
 ))
 
 dbservice = DBService()
