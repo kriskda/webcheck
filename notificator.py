@@ -16,11 +16,14 @@ class MailSender:
         self.__send_mail(to_email, mime_message)
         
     def __send_mail(self, to_email, mime_message):
-        server = smtplib.SMTP(self.smtp)
-        server.starttls()
-        server.login(self.username, self.password)
-        server.sendmail(self.from_email, to_email, mime_message.as_string())
-        server.quit()
+        try:
+            server = smtplib.SMTP(self.smtp)
+            server.starttls()
+            server.login(self.username, self.password)
+            server.sendmail(self.from_email, to_email, mime_message.as_string())
+            server.quit()
+        except smtplib.SMTPAuthenticationError:
+            print "Could not send notification e-mail. Check user name, password and server name!"			
 
     def composeMimeMessage(self, to_email, subject, message):
         mime_message = MIMEText(message, 'plain', 'utf-8')

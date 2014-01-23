@@ -9,11 +9,17 @@ from notificator import MailSender
 
 class WebCheckScheduler(object):
 
-    def __init__(self, dbservice):
+    def __init__(self, app, dbservice):
         self.dbservice = dbservice		
         self.sched = None
         self.url_check = URLCheck()
-        self.mail_sender = MailSender('icse.us.edu@gmail.com', 'icse.us.edu', 'Netbook4all', 'smtp.gmail.com:587')  
+        
+        notificator_email = app.config['NOTIFICATOR_EMAIL']
+        notificator_user = app.config['NOTIFICATOR_USER']
+        notificator_password = app.config['NOTIFICATOR_PASSWORD']
+        notificator_mail_server = app.config['NOTIFICATOR_MAIL_SERVER']
+        
+        self.mail_sender = MailSender(notificator_email, notificator_user, notificator_password, notificator_mail_server)  
 
     def main_job(self):		  
         websites = self.dbservice.query_db('SELECT * FROM sites')

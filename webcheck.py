@@ -7,16 +7,21 @@ app = Flask(__name__)
 
 # App config
 app.config.update(dict(
-	DATABASE='webcheck.db',
-	DEBUG=True,
-	SECRET_KEY='development key',
-	USERNAME='admin',
-	PASSWORD='default',
+	DATABASE = 'webcheck.db',
+	DEBUG = True,
+	SECRET_KEY = 'development key',
+	USERNAME = 'admin',
+	PASSWORD = 'default',
+	SCHEDULER_TIME_INTERVAL=60,
+	NOTIFICATOR_EMAIL = '',
+	NOTIFICATOR_USER = '',
+	NOTIFICATOR_PASSWORD = '',	
+	NOTIFICATOR_MAIL_SERVER = '',
 ))
 
 dbservice = DBService()
 dbservice.app = app
-web_check_scheduler = WebCheckScheduler(dbservice)
+web_check_scheduler = WebCheckScheduler(app, dbservice)
 
 # Route functions
 @app.route('/check_db_state', methods = ['GET'])
@@ -69,7 +74,7 @@ def index():
 
 if __name__ == '__main__':
     dbservice.init_db()	
-    web_check_scheduler.start(60)    
-    app.run(use_reloader=False) # we don't want reloader due to scheduler
+    web_check_scheduler.start(app.config['SCHEDULER_TIME_INTERVAL'])    
+    app.run(use_reloader = False) # we don't want reloader due to scheduler
 
 
