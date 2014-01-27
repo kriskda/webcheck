@@ -79,6 +79,30 @@ def index():
     
     return render_template('index.html', sites = dbservice.query_db('SELECT * FROM sites'))
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    error = None
+    
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+		
+        if username != app.config['USERNAME'] or password != app.config['PASSWORD']:
+            error = 'Invalid access'
+        else:
+            session['logged_in'] = True
+            flash('You were logged in')
+            
+            return redirect(url_for('show_entries'))
+            
+    return render_template('login.html', error=error)
+    
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+
+    return redirect(url_for('show_entries'))
+
 if __name__ == '__main__':
     dbservice.init_db()	
     web_check_scheduler.start(app.config['SCHEDULER_TIME_INTERVAL'])    
