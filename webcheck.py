@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, session, render_template, redirect, jsonify, request, url_for
 from contextlib import closing
 from scheduler import WebCheckScheduler
 from dbservice import DBService
@@ -74,38 +74,38 @@ def get_site(site_id):
     return render_template('site.html', site = dbservice.query_db('SELECT * FROM sites WHERE id == ?', [site_id])[0] )
 
 @app.route('/')
-def index():
-    dbservice.execute_db('UPDATE dbutil SET db_code=? WHERE id=?', [0, 1])
-    
-    return render_template('index.html', sites = dbservice.query_db('SELECT * FROM sites'))
+def index():    	
+    if 'logged_in' in session:
+        dbservice.execute_db('UPDATE dbutil SET db_code=? WHERE id=?', [0, 1])
+
+        return render_template('index.html', sites = dbservice.query_db('SELECT * FROM sites'))
+    else:	
+        return redirect(url_for('login'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    error = None
-    
-    if request.method == 'POST':
+    if request.method == 'POST':	
         username = request.form['username']
         password = request.form['password']
 		
-        if username != app.config['USERNAME'] or password != app.config['PASSWORD']:
-            error = 'Invalid access'
+        if username != app.config['USERNAME'] or password != app.config['PASSWORD']:	
+            return render_template('login.html')
         else:
-            session['logged_in'] = True
-            flash('You were logged in')
-            
-            return redirect(url_for('show_entries'))
-            
-    return render_template('login.html', error=error)
+            session['logged_in'] = True		
+            return redirect(url_for('index'))
+    else:
+        return render_template('login.html')		            
     
 @app.route('/logout')
 def logout():
     session.pop('logged_in', None)
 
-    return redirect(url_for('show_entries'))
+    return redirect(url_for('login'))
 
 if __name__ == '__main__':
     dbservice.init_db()	
     web_check_scheduler.start(app.config['SCHEDULER_TIME_INTERVAL'])    
     app.run(use_reloader = False) # we don't want reloader due to scheduler
-
+    
+    
 
