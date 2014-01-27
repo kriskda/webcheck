@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html>
+	<head>	
+		<title>webcheck</title>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">	
+		
+		<link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.css') }}">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/flat-ui.css') }}">	
+	</head>
+	
+	<body>		
+	
+	<div class="login-container">
+	<div class="container">
+		
+		<div class="login-screen">
+					
+			<h4>Welcome to <b>webcheck</b></h4>				
+			
+			<div class="login-form">
+				<div class="form-group">
+				<input type="text" class="form-control login-field" value="" placeholder="Username" id="login-name" />
+				</div>
+
+				<div class="form-group">
+				<input type="password" class="form-control login-field" value="" placeholder="Password" id="login-pass" />
+				</div>
+
+				<a class="btn btn-primary btn-lg btn-block" href="#">Login</a>
+			</div>
+		
+		</div>
+		
+	</div>
+	</div>
+	
+	<script src="{{ url_for('static', filename='js/jquery-1.10.2.min.js') }}"></script>
+	
+	</body>
+	
+</html>
