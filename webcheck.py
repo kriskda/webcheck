@@ -83,18 +83,18 @@ def index():
         return redirect(url_for('login'))
 
 @app.route('/login', methods=['GET', 'POST'])
-def login():
+def login(): 
     if request.method == 'POST':	
         username = request.form['username']
         password = request.form['password']
 		
         if username != app.config['USERNAME'] or password != app.config['PASSWORD']:	
-            return render_template('login.html')
+            return render_template('login.html', message = "Invalid access")
         else:
             session['logged_in'] = True		
             return redirect(url_for('index'))
     else:
-        return render_template('login.html')		            
+        return render_template('login.html', message = "Login to continue")		            
     
 @app.route('/logout')
 def logout():
