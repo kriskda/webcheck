@@ -86,7 +86,43 @@ class WebcheckTestCase(unittest.TestCase):
 		assert "Edit" in return_html.data
 		assert "Delete" in return_html.data	
 
+	def login(self, username, password):
+		return self.app.post('/login', data=dict(
+			username=username,
+			password=password
+		), follow_redirects=True)
 
+	def logout(self):
+		return self.app.get('/logout', follow_redirects=True)
+		
+	def test_login_logout(self):
+		rv = self.app.get('/')
+		
+		assert 'Username' in rv.data
+		assert 'Password' in rv.data
+				
+		rv = self.login('admin', 'default')		
+		
+		assert 'Add website' in rv.data
+		assert 'logout' in rv.data
+		rv = self.logout()		
+    
+		assert 'Username' in rv.data
+		assert 'Password' in rv.data
+		
+		rv = self.login('bad', 'default')
+		
+		assert 'Invalid access' in rv.data
+		assert 'Username' in rv.data
+		assert 'Password' in rv.data
+		
+		rv = self.login('admin', 'bad')
+		
+		assert 'Invalid access' in rv.data
+		assert 'Username' in rv.data
+		assert 'Password' in rv.data		
+    
+    
 if __name__ == '__main__':
 	unittest.main()
 
