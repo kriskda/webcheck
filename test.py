@@ -8,6 +8,8 @@ import json
 class WebcheckTestCase(unittest.TestCase):
 	
 	TEST_URL = "http://google.com"
+	USERNAME = 'admin'
+	PASSWORD = 'default'
 
 	def setUp(self):
 		self.db_fd, webcheck.app.config['DATABASE'] = tempfile.mkstemp()
@@ -29,11 +31,15 @@ class WebcheckTestCase(unittest.TestCase):
 		return self.app.delete("/delete/" + str(site_id))
 		
 	def test_empty_db(self):
+		self.login(self.USERNAME, self.PASSWORD)		
+		
 		return_html = self.app.get('/')
 
 		assert "No sites so far..." in return_html.data
 		
 	def test_add_site(self):
+		self.login(self.USERNAME, self.PASSWORD)		
+				
 		return_json = json.loads(self.add_site(self.TEST_URL).data)	
 		return_html = self.app.get('/')
 
@@ -48,6 +54,8 @@ class WebcheckTestCase(unittest.TestCase):
 		assert "Delete" in return_html.data		
 
 	def test_add_delete_site(self):
+		self.login(self.USERNAME, self.PASSWORD)		
+				
 		return_json = json.loads(self.add_site(self.TEST_URL).data)	
 		return_html = self.app.get('/')
 		
@@ -61,6 +69,8 @@ class WebcheckTestCase(unittest.TestCase):
 		assert "No sites so far..." in return_html.data
 		
 	def test_add_edit_site(self):
+		self.login(self.USERNAME, self.PASSWORD)		
+				
 		return_json = json.loads(self.add_site(self.TEST_URL).data)	
 		return_html = self.app.get('/')
 
@@ -73,6 +83,8 @@ class WebcheckTestCase(unittest.TestCase):
 		assert new_url in return_html.data
 		
 	def test_add_get_site(self):
+		self.login(self.USERNAME, self.PASSWORD)		
+				
 		return_json = json.loads(self.add_site(self.TEST_URL).data)	
 		return_html = self.app.get('/')
 
@@ -96,10 +108,11 @@ class WebcheckTestCase(unittest.TestCase):
 		return self.app.get('/logout', follow_redirects=True)
 		
 	def test_login_logout(self):
-		rv = self.app.get('/')
-		
+		rv = self.app.get('/login')
+
 		assert 'Username' in rv.data
 		assert 'Password' in rv.data
+		assert 'Login to continue' in rv.data
 				
 		rv = self.login('admin', 'default')		
 		
@@ -109,18 +122,19 @@ class WebcheckTestCase(unittest.TestCase):
     
 		assert 'Username' in rv.data
 		assert 'Password' in rv.data
+		assert 'Login to continue' in rv.data
 		
 		rv = self.login('bad', 'default')
-		
-		assert 'Invalid access' in rv.data
+				
 		assert 'Username' in rv.data
 		assert 'Password' in rv.data
+		assert 'Invalid access' in rv.data
 		
 		rv = self.login('admin', 'bad')
-		
-		assert 'Invalid access' in rv.data
+
 		assert 'Username' in rv.data
-		assert 'Password' in rv.data		
+		assert 'Password' in rv.data	
+		assert 'Invalid access' in rv.data	
     
     
 if __name__ == '__main__':
