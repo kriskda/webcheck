@@ -14,7 +14,7 @@
 		
 		<div class="demo-headline">
 			<h1>webcheck</h1>
-			<a href="#" />logout</a>
+			<a href="logout" />logout</a>			
 		</div>
 
 		<div class="row">
@@ -22,27 +22,12 @@
 				<b>Add website</b>
 				<form name="addsite" method="POST">
 					<input id="input-url" type="text" name="url" placeholder="url"><a id="addlink" href="#" class="btn btn-large btn-primary">Add site</a>
-				</form>
+				</form>		
 			</div>
 			
 			<div id="sites-list" class="span8 offset">		
 				{% for site in sites %}
-				<div id="site-entry{{ site.id }}" class="site-entry">
-					<b><a href="{{ site.url }}" target="_blank">{{ site.url }}</a></b>
-					<br />
-					<div class="details">
-						<div class="left">
-							<b>Last check:</b> 
-							<br />
-							{{ site.last_check }}
-						</div>						
-						<div class="right">
-							 {{ site.status_code }} 
-							 <a id="edit-site{{ site.id }}" href="#" class="btn btn-mini btn-warning">Edit</a> 
-							 <a id="delete-site{{ site.id }}" href="#" class="btn btn-small btn-danger">Delete</a>
-						</div>	
-					</div>
-				</div>					
+				{% include 'site.html' %}					
 				{% else %}
 				<div id="no-site-entry"><em>No sites so far...</em></div>
 				{% endfor %}			
@@ -55,14 +40,14 @@
 	<footer>
 		<div class="container">
 			<div class="row">
-			<h3 class="footer-title">ver 0.1</h3>
+			<h3 class="footer-title">ver 0.1.0</h3>
 			</div>
 		</div>
 	<footer>	
 	
 	<script src="{{ url_for('static', filename='js/jquery-1.10.2.min.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/app-functions.js') }}"></script>
-
+	
 	</body>
 	
 </html>

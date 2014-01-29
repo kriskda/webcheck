@@ -1,3 +1,10 @@
+.login-container {
+	background-color: #1abc9c;
+	position:absolute;
+    top:0; right:0;
+    bottom:0; left:0;
+}
+
 .site-entry {
 	padding: 10px;
 	margin: 10px;
@@ -16,4 +23,21 @@
 
 .right {
 	float: right;
+}
+
+div.status {
+	color: white;
+	padding: 12px;
+}
+ 
+div.status-alert {
+	background-color: #e74c3c;
+}
+
+div.status-normal {
+	background-color: #2ecc71;
+}
+
+div.status-unknown {
+	background-color: #bdc3c7;
 }
